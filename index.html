@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
@@ -296,29 +296,8 @@
   </a>
 </div>
 
-<!-- GİRİŞ EKRANI -->
-<div id="intro" style="
-  position:fixed;inset:0;z-index:9999;
-  background:#0a0a0a;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:24px;
-">
-  <div style="font-size:clamp(48px,8vw,96px);font-weight:900;color:#e63946;letter-spacing:-.02em;">LOYALTY</div>
-  <div style="font-size:16px;color:#888;">Discord Sunucusuna hoş geldin</div>
-  <button onclick="enterSite()" style="
-    background:#e63946;color:#fff;border:none;
-    padding:16px 48px;border-radius:8px;font-size:18px;font-weight:700;
-    cursor:pointer;margin-top:8px;
-    box-shadow:0 0 30px rgba(230,57,70,.4);
-    transition:transform .15s,box-shadow .15s;
-  " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 50px rgba(230,57,70,.6)'"
-     onmouseout="this.style.transform='none';this.style.boxShadow='0 0 30px rgba(230,57,70,.4)'">
-    Gir 🔊
-  </button>
-</div>
-
 <!-- MÜZİK KONTROL -->
-<div id="musicControl" style="position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;transition:opacity .5s;">
+<div id="musicControl" style="position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .5s;">
   <div id="sliderWrap" style="display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transition:opacity .2s;">
     <span id="volLabel" style="font-size:11px;color:#e63946;font-weight:700;">50%</span>
     <input id="volumeSlider" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)" style="
@@ -390,19 +369,6 @@ function onYouTubeIframeAPIReady() {
 }
 
 function enterSite() {
-  // Giriş ekranını kapat
-  var intro = document.getElementById('intro');
-  intro.style.transition = 'opacity .6s';
-  intro.style.opacity = '0';
-  setTimeout(function() { intro.style.display = 'none'; }, 600);
-
-  // Müzik kontrol butonunu göster
-  document.getElementById('musicControl').style.opacity = '1';
-
-  // Müziği başlat
-  if (player) { player.playVideo(); playing = true; }
-}
-
 function toggleMusic() {
   if (!player) return;
   if (playing) {
