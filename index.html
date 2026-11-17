@@ -296,26 +296,6 @@
   </a>
 </div>
 
-<!-- MÜZİK KONTROL -->
-<div id="musicControl" style="position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .5s;">
-  <div id="sliderWrap" style="display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transition:opacity .2s;">
-    <span id="volLabel" style="font-size:11px;color:#e63946;font-weight:700;">50%</span>
-    <input id="volumeSlider" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)" style="
-      writing-mode:vertical-lr;direction:rtl;
-      width:4px;height:72px;cursor:pointer;accent-color:#e63946;
-    ">
-  </div>
-  <button id="musicBtn" onclick="window.open('https://www.youtube.com/watch?v=Rpc8pTvNHwA','_blank')"
-    onmouseenter="document.getElementById('sliderWrap').style.opacity=1"
-    onmouseleave="document.getElementById('sliderWrap').style.opacity=0"
-    style="
-      background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.5);
-      color:#e63946;width:48px;height:48px;border-radius:50%;font-size:20px;
-      cursor:pointer;backdrop-filter:blur(8px);
-      box-shadow:0 0 15px rgba(230,57,70,.3);
-    ">🔊</button>
-</div>
-
 <!-- MÜZİK BİLDİRİMİ -->
 <div id="musicToast" onclick="startMusicFromToast()" style="
   position:fixed;bottom:88px;right:24px;z-index:9998;
