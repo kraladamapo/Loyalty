@@ -343,14 +343,20 @@
 <script>
 function startMusicFromToast() {
   var toast = document.getElementById('musicToast');
-  if (window.player) {
-    window.player.playVideo();
-    window.playing = true;
-    document.getElementById('musicBtn').textContent = '🔊';
-  }
   toast.style.transition = 'opacity .3s';
   toast.style.opacity = '0';
   setTimeout(function(){ toast.style.display='none'; }, 300);
+
+  function tryPlay() {
+    if (player && player.playVideo) {
+      player.playVideo();
+      playing = true;
+      document.getElementById('musicBtn').textContent = '🔊';
+    } else {
+      setTimeout(tryPlay, 300);
+    }
+  }
+  tryPlay();
 }
 </script>
 <div id="ytPlayer" style="position:fixed;width:0;height:0;overflow:hidden;"></div>
