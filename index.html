@@ -296,44 +296,111 @@
   </a>
 </div>
 
-<!-- MÜZİK BUTONU -->
-<div style="position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;align-items:center;gap:8px;">
-  <input id="volumeSlider" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)" style="
-    writing-mode:vertical-lr;direction:rtl;
-    width:4px;height:80px;cursor:pointer;
-    accent-color:#e63946;opacity:0;transition:opacity .2s;
-  ">
-  <button id="musicBtn" onclick="toggleMusic()" onmouseenter="document.getElementById('volumeSlider').style.opacity=1" onmouseleave="document.getElementById('volumeSlider').style.opacity=0" style="
-    background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.5);
-    color:#e63946;width:48px;height:48px;border-radius:50%;font-size:20px;
-    cursor:pointer;backdrop-filter:blur(8px);transition:all .2s;
-    box-shadow:0 0 15px rgba(230,57,70,.3);
-  " title="Müzik">🔊</button>
+<!-- GİRİŞ EKRANI -->
+<div id="intro" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#0a0a0a;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:24px;
+">
+  <div style="font-size:clamp(48px,8vw,96px);font-weight:900;color:#e63946;letter-spacing:-.02em;">LOYALTY</div>
+  <div style="font-size:16px;color:#888;">Discord Sunucusuna hoş geldin</div>
+  <button onclick="enterSite()" style="
+    background:#e63946;color:#fff;border:none;
+    padding:16px 48px;border-radius:8px;font-size:18px;font-weight:700;
+    cursor:pointer;margin-top:8px;
+    box-shadow:0 0 30px rgba(230,57,70,.4);
+    transition:transform .15s,box-shadow .15s;
+  " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 50px rgba(230,57,70,.6)'"
+     onmouseout="this.style.transform='none';this.style.boxShadow='0 0 30px rgba(230,57,70,.4)'">
+    Gir 🔊
+  </button>
 </div>
 
-<!-- GİZLİ YOUTUBE PLAYER -->
+<!-- MÜZİK KONTROL -->
+<div id="musicControl" style="position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;transition:opacity .5s;">
+  <div id="sliderWrap" style="display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transition:opacity .2s;">
+    <span id="volLabel" style="font-size:11px;color:#e63946;font-weight:700;">50%</span>
+    <input id="volumeSlider" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)" style="
+      writing-mode:vertical-lr;direction:rtl;
+      width:4px;height:72px;cursor:pointer;accent-color:#e63946;
+    ">
+  </div>
+  <button id="musicBtn" onclick="toggleMusic()"
+    onmouseenter="document.getElementById('sliderWrap').style.opacity=1"
+    onmouseleave="document.getElementById('sliderWrap').style.opacity=0"
+    style="
+      background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.5);
+      color:#e63946;width:48px;height:48px;border-radius:50%;font-size:20px;
+      cursor:pointer;backdrop-filter:blur(8px);
+      box-shadow:0 0 15px rgba(230,57,70,.3);
+    ">🔊</button>
+</div>
+
+<!-- MÜZİK BİLDİRİMİ -->
+<div id="musicToast" onclick="startMusicFromToast()" style="
+  position:fixed;bottom:88px;right:24px;z-index:9998;
+  background:rgba(20,20,20,.95);border:1px solid rgba(230,57,70,.4);
+  border-radius:12px;padding:12px 16px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 20px rgba(230,57,70,.2);
+  animation:toastIn .5s .8s both;
+  max-width:220px;
+">
+  <span style="font-size:20px;animation:spin 2s linear infinite;">🎵</span>
+  <div>
+    <div style="font-size:11px;color:#888;margin-bottom:2px;">Şu an çalıyor</div>
+    <div style="font-size:13px;font-weight:700;color:#e63946;">Apocan Special</div>
+    <div style="font-size:11px;color:#888;margin-top:2px;">▶ Başlatmak için tıkla</div>
+  </div>
+</div>
+
+<style>
+@keyframes toastIn { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:none; } }
+@keyframes spin { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+</style>
+
+<script>
+function startMusicFromToast() {
+  var toast = document.getElementById('musicToast');
+  if (window.player) {
+    window.player.playVideo();
+    window.playing = true;
+    document.getElementById('musicBtn').textContent = '🔊';
+  }
+  toast.style.transition = 'opacity .3s';
+  toast.style.opacity = '0';
+  setTimeout(function(){ toast.style.display='none'; }, 300);
+}
+</script>
 <div id="ytPlayer" style="position:fixed;width:0;height:0;overflow:hidden;"></div>
 
 <footer><p>© 2026 <span>Loyalty</span> — Tüm hakları saklıdır.</p></footer>
 
 <script>
-var player, playing = false, started = false;
+var player, playing = false;
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('ytPlayer', {
     videoId: 'pcP4IhULXYM',
     playerVars: { autoplay: 0, loop: 1, playlist: 'pcP4IhULXYM' },
-    events: {
-      onReady: function() {
-        player.setVolume(50);
-        // İlk kullanıcı etkileşiminde otomatik başlat
-        document.addEventListener('click', function autoStart() {
-          if (!started) { player.playVideo(); playing = true; started = true; }
-          document.removeEventListener('click', autoStart);
-        }, { once: true });
-      }
-    }
+    events: { onReady: function() { player.setVolume(50); } }
   });
+}
+
+function enterSite() {
+  // Giriş ekranını kapat
+  var intro = document.getElementById('intro');
+  intro.style.transition = 'opacity .6s';
+  intro.style.opacity = '0';
+  setTimeout(function() { intro.style.display = 'none'; }, 600);
+
+  // Müzik kontrol butonunu göster
+  document.getElementById('musicControl').style.opacity = '1';
+
+  // Müziği başlat
+  if (player) { player.playVideo(); playing = true; }
 }
 
 function toggleMusic() {
@@ -348,11 +415,11 @@ function toggleMusic() {
     document.getElementById('musicBtn').style.boxShadow = '0 0 15px rgba(230,57,70,.3)';
   }
   playing = !playing;
-  started = true;
 }
 
 function setVolume(val) {
   if (player) player.setVolume(parseInt(val));
+  document.getElementById('volLabel').textContent = val + '%';
 }
 
 var tag = document.createElement('script');
